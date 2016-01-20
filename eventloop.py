@@ -4,7 +4,7 @@ import lawman
 import time
 import random
 from judgemethods import word_bags
-
+from common import config_reader
 
 def mainLoop(tieba_name='steam', cookie=None):
     tieba_crawlar = crawler.TiebaCrawler(tieba_name, cookie)
@@ -24,6 +24,7 @@ def mainLoop(tieba_name='steam', cookie=None):
 
 
 if __name__ == "__main__":
+    cookie , tiebaName = config_reader()
     cookie = {
-        "BDUSS": "Wdpa35WQ2hTN2lIcjFOVkRrfll5MEpvaWV0Y3k0VjdSQ21abmZPb2ZuMXRucmhXQVFBQUFBJCQAAAAAAAAAAAEAAADRi6MwS0lESm91cm5leQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAG0RkVZtEZFWa"}
-    mainLoop('dota2提问', cookie)
+        "BDUSS": cookie}
+    mainLoop(tiebaName, cookie)
