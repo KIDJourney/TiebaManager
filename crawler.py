@@ -55,7 +55,7 @@ class TiebaCrawler(Requester):
         post_content = post_content[:post_content.index('回复')]
         post_content = post_content[4:]
 
-        # time.sleep(1)
+        time.sleep(1)
 
         return post_content
 

@@ -4,7 +4,7 @@ import configparser
 
 def bs4_decorator(function):
     def soup_generator(self, url):
-        return bs4.BeautifulSoup(function(self, url).text, 'lxml')
+        return bs4.BeautifulSoup(function(self, url).text)
 
     return soup_generator
 
