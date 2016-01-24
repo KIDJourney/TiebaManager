@@ -3,28 +3,29 @@ import crawler
 import lawman
 import time
 import random
-from judgemethods import word_bags
+import logging
+import judgemethods
 from common import config_reader
 
-def mainLoop(tieba_name='steam', cookie=None):
-    tieba_crawlar = crawler.TiebaCrawler(tieba_name, cookie)
-    tieba_judger = judger.Judger(word_bags)
+
+def mainloop(tieba_name='steam', cookie=None):
+
+    tieba_crawler = crawler.TiebaCrawler(tieba_name, cookie)
+    tieba_judger = judger.Judger([judgemethods.WordsBag()])
     tieba_lawman = lawman.Lawman(tieba_name, cookie)
 
-    print("Start crawling.....")
-    post_dic = tieba_crawlar.get_posts_dict()
+    logging.info('Starting crawling')
+    post_dic = tieba_crawler.get_posts_dict()
     for url in post_dic:
         if tieba_judger.judge(post_dic[url]):
-            print("delete success")
             tieba_lawman.delete_post(url)
+            logging.info("{0} delete success".format(post_dic[url]['title']))
 
-    print("Judge finished")
+    logging.info("All judge finished")
 
     time.sleep(random.randint(20, 30))
 
 
 if __name__ == "__main__":
-    cookie , tiebaName = config_reader()
-    cookie = {
-        "BDUSS": cookie}
-    mainLoop(tiebaName, cookie)
+    user_cookie, tieba_name = config_reader()
+    mainloop(tieba_name, user_cookie)
