@@ -10,7 +10,6 @@ class TiebaCrawler(Requester):
         Get posts dict with { post_url : {'title':'post_title' , 'content':'postcontent'}} ,
         can't get image submmited in post
     """
-
     def __init__(self, tieba_name="steam", cookie=None):
         Requester.__init__(self, tieba_name, cookie)
 
@@ -21,24 +20,34 @@ class TiebaCrawler(Requester):
     def get_posts_dict(self):
         soup = self.get_content(self.tieba_base)
 
-        posts_list = soup.findAll('div', {'class': 'i'})
-        posts_list = [tag.find('a') for tag in posts_list if not tag.find('span', {'class': 'light'})]
+        post_a = self.__get_posts_a(soup)
+        titles_list = self.__get_posts_title(post_a)
 
-        titles_list = [tag.text for tag in posts_list]
-        titles_list = [title[title.index('\xa0') + 1:].replace(u'\xa0', '') for title in titles_list]
+        url_list = [self.url_base + tag.get('href') for tag in post_a]
 
-        url_list = [self.url_base + tag.get('href') for tag in posts_list]
-
-        post_content_list_not_clean = [self.get_post_content(url) for url in url_list]
-
-        post_content_list = spamword.clean_spam_word(post_content_list_not_clean)
+        post_content_list = self.__get_posts_content(url_list)
 
         posts_dic = {url_list[index]: {'title': titles_list[index], 'content': post_content_list[index]} for index in
                      range(len(url_list))}
 
         return posts_dic
 
-    def get_post_content(self, post_url):
+    def __get_posts_content(self, url_list):
+        post_content_list_not_clean = [self.__get_post_content(url) for url in url_list]
+        post_content_list = spamword.clean_spam_word(post_content_list_not_clean)
+        return post_content_list
+
+    def __get_posts_title(self, post_a):
+        titles_list = [tag.text for tag in post_a]
+        titles_list = [title[title.index('\xa0') + 1:].replace(u'\xa0', '') for title in titles_list]
+        return titles_list
+
+    def __get_posts_a(self, soup):
+        posts_list = soup.findAll('div', {'class': 'i'})
+        posts_list = [tag.find('a') for tag in posts_list if not tag.find('span', {'class': 'light'})]
+        return posts_list
+
+    def __get_post_content(self, post_url):
         content = self.get_content(post_url)
 
         post_content = content.find('div', {'class': 'i'}).text
