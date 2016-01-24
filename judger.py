@@ -1,3 +1,7 @@
+import collections
+import judgemethods
+
+
 class Judger:
     """Post judge
 
@@ -5,14 +9,25 @@ class Judger:
        (Should Apply multiple judge method)
     """
 
-    def __init__(self, judge_method=None):
-        if judge_method:
-            self.judge_method = judge_method
-        else:
-            raise Exception("No judge method is provided")
+    def __init__(self, methods=None):
+        if not isinstance(methods, collections.Iterable):
+            raise Exception("The judge method must be iterable")
+        if methods is None:
+            raise Exception("The judge method can't be empty")
 
-    def judge(self, post_dict):
-        post_title = post_dict['title']
-        post_content = post_dict['content']
+        self.methods = methods
 
-        return self.judge_method(post_title, post_content) > 0
+    def judge(self, postdict):
+        post_title = postdict['title']
+        post_content = postdict['content']
+
+        for method in self.methods:
+            if method.judge(post_title, post_content):
+                return True
+
+        return False
+
+    def add_method(self, method):
+        if not issubclass(method, judgemethods.JudgeBase):
+            raise Exception("The method you add must implement JudgeBase")
+        self.methods.append(method)
