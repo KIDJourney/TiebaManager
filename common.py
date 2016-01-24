@@ -1,6 +1,7 @@
 import bs4
 import configparser
 
+
 def bs4_decorator(function):
     def soup_generator(self, url):
         return bs4.BeautifulSoup(function(self, url).text, 'lxml')
@@ -15,7 +16,9 @@ def config_reader():
     cookie = config['setting']['cookie']
     tiebaName = config['setting']['tieba']
 
-    cookie = {"BDUSS":cookie}
+    cookie = {"BDUSS": cookie}
 
-    return (cookie , tiebaName)
+    return (cookie, tiebaName)
 
+if __name__ == "__main__":
+    print(config_reader())
