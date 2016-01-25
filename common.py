@@ -20,5 +20,13 @@ def config_reader():
 
     return (cookie, tiebaName)
 
+
+def config_intervaltime():
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+
+    return int(config['setting']['requestinterval'])
+
+
 if __name__ == "__main__":
     print(config_reader())
