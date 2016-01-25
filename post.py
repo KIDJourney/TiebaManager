@@ -20,6 +20,21 @@ class PostBase:
 \tBan_url: {4}
         """.format(self.content, self.author, self.time, self.del_url, self.ban_url)
 
+    def get_content(self):
+        return self.content
+
+    def get_author(self):
+        return self.author
+
+    def get_time(self):
+        return self.time
+
+    def get_del_url(self):
+        return self.del_url
+
+    def get_ban_url(self):
+        return self.ban_url
+
 
 class Reply(PostBase):
     def __init__(self, tag=None):
@@ -51,6 +66,12 @@ class Post(PostBase):
         self.url = url
         self.reply_list = []
         self.__soup_analyze(soup)
+
+    def get_url(self):
+        return self.url
+
+    def get_title(self):
+        return self.title
 
     def __str__(self):
         return "\tUrl: {0}\n".format(self.url) + "\tTitle: {0}".format(self.title) + PostBase.__str__(self)
@@ -116,6 +137,6 @@ if __name__ == "__main__":
 </div>
 <div class="d h">管理模式|<a href="m?kz=4320033252&amp;r=0&amp;pn=0&amp;pinf=0_2_0&amp;see_lz=0">普通模式</a></div> <div class="d h">KIDJourney <br/><a href="i?un=KIDJourney&amp;lp=5007&amp;pinf=1_8_0_2_@steam_@4320033252">我的i贴吧</a> <a href="m?tn=bdFBW&amp;tab=favorite&amp;lp=6009&amp;pinf=1_2_0">我爱逛的贴吧</a><br/></div> <a href="m?kw=steam&amp;lp=6012&amp;pn=0&amp;pinf=1">steam吧</a> &lt; <a href="m?tn=bdIndex&amp;lp=6013&amp;pinf=1_2_0">贴吧</a> &lt; <a href="http://wap.baidu.com/?lp=6013&amp;pinf=1_2_0&amp;ssid=&amp;from=&amp;uid=439281407650F15229067DB692A4A231%3AFG%3D1&amp;pu=&amp;auth=&amp;originid=2&amp;mo_device=1&amp;bd_page_type=1">百度</a><br/> <a href="urs?src=1&amp;z=4320033252&amp;pinf=1_2_0">阅读设置</a><br/> <div style="text-align:center;"><a href="#top"><img alt="TOP" src="http://wap.baidu.com/r/wise/wapsearchindex/top.gif"/></a></div>    2016-1-25 16:13<a name="bottom"></a></div></body></html>
 """)
-    post = Post(soupDemo)
+    post = Post('blabla', soup=soupDemo)
     print(post)
-    print(post.reply_list)
+    print(list(map(str, post.reply_list)))
