@@ -1,5 +1,6 @@
 from requester import Requester
 from common import config_reader
+from constant import *
 
 class Lawman(Requester):
     """Posts and Users opeartor unit 
@@ -10,13 +11,12 @@ class Lawman(Requester):
 
     def __init__(self, tieba_name="steam", cookie=None):
         Requester.__init__(self, tieba_name, cookie)
-        self.tieba_mobile_url = "http://tieba.baidu.com/mo"
 
     def delete_post(self, post_url):
         post_soup = self.get_content(post_url)
 
         delete_page_url = post_soup.find('a', text='删主题').get('href')
-        delete_page_url = self.tieba_mobile_url + '/' + delete_page_url
+        delete_page_url = TIEBA_MOBILE_URL + delete_page_url
 
         delete_page_response = self.get_content(delete_page_url)
         delete_confirm_url = delete_page_response.find('a', text='确认删除')
