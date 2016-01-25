@@ -8,6 +8,7 @@ There are still many unexcept situations unhandled , just a simple and crude dem
 * Requests moudle
 * beautifulsoup4
 * configparser
+* lxml
 
 Tested in only linux .
 ## Install
@@ -25,3 +26,12 @@ $ mv config.example.ini config.ini
 ```
 $ python3 main.py 
 ```
+
+## Judge Method
+
+You can implement your own judge method in judgemethod.py or your own file .
+Be Sure you class implement judge method of judgemethod.JudgeBase .
+
+## Warning
+
+The Project is still in develop , some of code may be refactored frequently.
