@@ -14,8 +14,8 @@ class Requester:
 
         self.session_worker = requests.Session()
         self.cookie = cookie
-        self.tieba_base = TIEBA_BASE_URL.format(tieba_name=tieba_name)
-        self.url_base = "http://tieba.baidu.com"
+        self.tieba_base = TIEBA_MOBILE_BASE_URL.format(tieba_name=tieba_name)
+        self.url_base = TIEBA_URL
 
     @bs4_decorator
     def get_content(self, url):

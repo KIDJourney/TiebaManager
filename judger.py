@@ -1,3 +1,4 @@
+from post import Post
 import collections
 import judgemethods
 
@@ -17,14 +18,10 @@ class Judger:
 
         self.methods = methods
 
-    def judge(self, postdict):
-        post_title = postdict['title']
-        post_content = postdict['content']
-
+    def judge(self, postobject):
         for method in self.methods:
-            if method.judge(post_title, post_content):
+            if method.judge(postobject):
                 return True
-
         return False
 
     def add_method(self, method):
