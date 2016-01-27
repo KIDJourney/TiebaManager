@@ -1,14 +1,16 @@
 from requester import Requester
-from common import config_reader , config_intervaltime
+from common import config_reader, config_intervaltime
 import post
 import time
 import spamword
+import rediscache
 
 
 class TiebaCrawler(Requester):
     """ Post crawler  , gather information of posts in given bar
         can't get image submmited in post
     """
+
     def __init__(self, tieba_name="steam", cookie=None):
         Requester.__init__(self, tieba_name, cookie)
 
@@ -28,7 +30,8 @@ class TiebaCrawler(Requester):
 
         return post_list
 
-    def __get_content_list(self , url_list):
+    @rediscache.postcache
+    def __get_content_list(self, url_list):
         content_list = []
 
         for url in url_list:
@@ -48,5 +51,7 @@ if __name__ == "__main__":
     cookie, _ = config_reader()
     tieba_worker = TiebaCrawler(cookie=cookie, tieba_name='dota2提问')
     posts = tieba_worker.get_posts()
-    print(list(map(str, posts)))
-    print(list(map(str, posts[0].reply_list)))
+    print(len(list(map(str, posts))))
+    posts = tieba_worker.get_posts()
+    print(len(list(map(str, posts))))
+    # print(list(map(str, posts[0].reply_list)))
