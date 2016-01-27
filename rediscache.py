@@ -1,4 +1,6 @@
 import redis
+import logging
+
 
 def postcache(func):
     def redischeck(instance, url_list):
@@ -6,8 +8,10 @@ def postcache(func):
         url_not_cached = []
         for url in url_list:
             if redisclient.get(url):
+                logging.info('Cache %s hit' % url)
                 redisclient.expire(url, 600)
             else:
+                logging.info('Caching %s' % url)
                 redisclient.set(url, 'True')
                 redisclient.expire(url, 600)
                 url_not_cached.append(url)
