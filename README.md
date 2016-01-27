@@ -14,7 +14,8 @@ Tested in only linux .
 
 ## Install
 
-After you satisfy the requirements
+After you satisfy the requirements .
+Make sure your redis has default configure .
 
 ### Step 0
 ```
