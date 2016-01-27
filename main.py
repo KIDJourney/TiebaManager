@@ -9,4 +9,4 @@ if __name__ == "__main__":
         try:
             mainloop(tiebaName, cookie)
         except Exception as e:
-            logging.warn(str(e))
+            logging.warning(str(e))
