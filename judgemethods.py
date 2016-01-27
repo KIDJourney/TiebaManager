@@ -1,6 +1,7 @@
 import requests
 import json
 import time
+import logging
 
 class JudgeBase:
     """
@@ -40,6 +41,8 @@ class TxnlpTextJudge(JudgeBase):
         url = "http://nlp.qq.com/public/wenzhi/api/common_api.php"
         body = {'url_path': 'http://10.209.0.215:55000/text/sentiment',
                 'body_data': ""}
+
+        logging.info("Judging {0} {1}".format(post.get_title() , post.get_content()))
 
         content = json.dumps({'content': post.get_title() + post.get_content()})
         body['body_data'] = content
