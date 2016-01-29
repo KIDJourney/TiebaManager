@@ -11,7 +11,7 @@ from common import config_reader
 def mainloop(tieba_name='steam', cookie=None):
 
     tieba_crawler = crawler.TiebaCrawler(tieba_name, cookie)
-    tieba_judger = judger.Judger([judgemethods.WordsBag()])
+    tieba_judger = judger.Judger([judgemethods.TxnlpTextJudge()])
     tieba_lawman = lawman.Lawman(tieba_name, cookie)
 
     logging.info('Starting crawling')
@@ -28,5 +28,6 @@ def mainloop(tieba_name='steam', cookie=None):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(filename='log.txt', level=logging.DEBUG, format='%(asctime)s %(message)s')
     user_cookie, tieba_name = config_reader()
     mainloop('dota2提问', user_cookie)
