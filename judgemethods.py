@@ -53,6 +53,16 @@ class TxnlpTextJudge(JudgeBase):
 
         return response['negative'] > 0.75
 
+class PatternCheck(JudgeBase):
+    """
+    Check if pattern fit standerd
+    For tiaozaoshichang bar
+    """
+
+    def judge(self , post):
+        title = post.get_title()
+        start_chr = ['R' , 'r' , '【']
+        return title[0] in start_chr
 
 if __name__ == "__main__":
     title = '求送'
