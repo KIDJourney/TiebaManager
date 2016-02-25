@@ -3,6 +3,19 @@ import json
 import time
 import logging
 
+
+def judge_method_logger(func):
+    def judege_logger(instance, postobject):
+        judge_result = func(instance, postobject)
+
+        logging.info(
+                "Judging {0} {1} : {2}".format(postobject.get_title(), postobject.get_content(), str(judge_result)))
+
+        return judge_result
+
+    return judege_logger
+
+
 class JudgeBase:
     """
     JudgeMethod base class , implement judge method
@@ -18,6 +31,7 @@ class WordsBag(JudgeBase):
     Read word from file and detect if word is in post
     """
 
+    @judge_method_logger
     def judge(self, post):
         wordbag = []
         with open('wordsbag.txt') as f:
@@ -37,12 +51,11 @@ class TxnlpTextJudge(JudgeBase):
     Page:http://nlp.qq.com/semantic.cgi#page4
     """
 
+    @judge_method_logger
     def judge(self, post):
         url = "http://nlp.qq.com/public/wenzhi/api/common_api.php"
         body = {'url_path': 'http://10.209.0.215:55000/text/sentiment',
                 'body_data': ""}
-
-        logging.info("Judging {0} {1}".format(post.get_title(), post.get_content()))
 
         content = json.dumps({'content': post.get_title() + post.get_content()})
         body['body_data'] = content
