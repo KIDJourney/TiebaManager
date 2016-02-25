@@ -3,6 +3,12 @@ import logging
 from urllib import parse
 
 def postcache(func):
+    """Decorator
+    Cache the post url that have been crawled
+    Check if the post have been crawled
+    :param func:
+    :return func:
+    """
     def redischeck(instance, url_list):
         redisclient = redis.StrictRedis()
         url_not_cached = []
@@ -21,6 +27,11 @@ def postcache(func):
     return redischeck
 
 def get_post_id(url):
+    """
+    Get post id from url
+    :param url:
+    :return string:
+    """
     url = parse.urlparse(url)
     query = url.query
     post_id = parse.parse_qs(query)['kz']

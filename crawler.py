@@ -12,6 +12,10 @@ class TiebaCrawler(Requester):
     """
 
     def __init__(self, tieba_name="steam", cookie=None):
+        """
+        :param tieba_name:
+        :param cookie:
+        """
         Requester.__init__(self, tieba_name, cookie)
 
     def __avaiable_check(self):
@@ -19,6 +23,10 @@ class TiebaCrawler(Requester):
         pass
 
     def get_posts(self):
+        """
+        Get all posts on first page of tieba , and generate a post objects list
+        :return list of Post object:
+        """
         soup = self.get_content(self.tieba_base)
 
         post_a = self.__get_posts_a(soup)
@@ -32,6 +40,11 @@ class TiebaCrawler(Requester):
 
     @rediscache.postcache
     def __get_content_list(self, url_list):
+        """
+        Get post content with given url list
+        :param url_list:
+        :return list of string:
+        """
         content_list = []
 
         for url in url_list:
@@ -42,6 +55,11 @@ class TiebaCrawler(Requester):
         return content_list
 
     def __get_posts_a(self, soup):
+        """
+        Get all post url from the soup of first page of tieba
+        :param soup:
+        :return list of posts' url:
+        """
         posts_list = soup.findAll('div', {'class': 'i'})
         posts_list = [tag.find('a') for tag in posts_list if not tag.find('span', {'class': 'light'})]
         return posts_list

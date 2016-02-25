@@ -3,6 +3,12 @@ import configparser
 
 
 def bs4_decorator(function):
+    """
+    Decorator
+    Generator a soup from give html content
+    :param function:
+    :return:
+    """
     def soup_generator(self, url):
         return bs4.BeautifulSoup(function(self, url).text)
 
@@ -10,6 +16,10 @@ def bs4_decorator(function):
 
 
 def config_reader():
+    """
+    Read tieba name and cookie from config file
+    :return Tuple (cookie , tiebaName):
+    """
     config = configparser.ConfigParser()
     config.read('config.ini')
 
@@ -22,6 +32,10 @@ def config_reader():
 
 
 def config_intervaltime():
+    """
+    Read intervaltime from config file
+    :return integer:
+    """
     config = configparser.ConfigParser()
     config.read('config.ini')
 
