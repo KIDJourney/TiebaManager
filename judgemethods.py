@@ -67,5 +67,15 @@ class TxnlpTextJudge(JudgeBase):
         return response['negative'] > 0.75
 
 
+class TestJudge(JudgeBase):
+    """
+    Judge for debugging
+    """
+
+    def judge(self, post):
+        post_title = post.get_title()
+        return post_title[0] == 'H'
+
+
 if __name__ == "__main__":
     title = '求送'
