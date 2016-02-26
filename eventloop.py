@@ -12,7 +12,7 @@ class EventLoop:
     def __init__(self, tieba_name='steam', cookie=None):
         self.tieba_name = tieba_name
         self.tieba_crawler = crawler.TiebaCrawler(tieba_name, cookie)
-        self.tieba_judger = judger.Judger([judgemethods.TestJudge()])
+        self.tieba_judger = judger.Judger(judgemethods.ENABLED_METHOD_LIST)
         self.tieba_lawman = lawman.Lawman(tieba_name, cookie)
 
     def loop(self):

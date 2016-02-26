@@ -1,13 +1,12 @@
 from post import Post
 import collections
-import judgemethods
 
 
 class Judger:
-    """Post judge
+    """
+    Post judge
 
-       Classify a post into legal or illegal
-       (Should Apply multiple judge method)
+    Classify a post into legal or illegal
     """
 
     def __init__(self, methods=None):
@@ -26,20 +25,20 @@ class Judger:
     def judge(self, postobject):
         """
         Judge the post with all method the judge have.
-        :param postobject:
+        :param Post postobject:
         :return boolean:
         """
         for method in self.methods:
-            if method.judge(postobject):
+            if method(postobject):
                 return True
         return False
 
     def add_method(self, method):
         """
         Add method to the judger
-        :param JudgeBase method:
+        :param callable method:
         :return:
         """
-        if not issubclass(method, judgemethods.JudgeBase):
+        if not callable(method):
             raise Exception("The method you add must implement JudgeBase")
         self.methods.append(method)
