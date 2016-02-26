@@ -8,26 +8,36 @@ import judgemethods
 from common import config_reader
 
 
-def mainloop(tieba_name='steam', cookie=None):
+class EventLoop:
+    def __init__(self, tieba_name='steam', cookie=None):
+        self.tieba_name = tieba_name
+        self.tieba_crawler = crawler.TiebaCrawler(tieba_name, cookie)
+        self.tieba_judger = judger.Judger(judgemethods.ENABLED_METHOD_LIST)
+        self.tieba_lawman = lawman.Lawman(tieba_name, cookie)
 
-    tieba_crawler = crawler.TiebaCrawler(tieba_name, cookie)
-    tieba_judger = judger.Judger([judgemethods.TxnlpTextJudge()])
-    tieba_lawman = lawman.Lawman(tieba_name, cookie)
+    def loop(self):
+        logging.info('Crawling start : {0}'.format(self.tieba_name))
+        post_list = self.tieba_crawler.get_posts()
+        logging.info("Crawling finish : {0}".format(self.tieba_name))
 
-    logging.info('Starting crawling')
-    post_list = tieba_crawler.get_posts()
+        logging.info('Judging Start , {0} tasks in queue'.format(len(post_list)))
+        delete_count = 0
+        for post in post_list:
+            if self.tieba_judger.judge(post):
+                self.tieba_lawman.delete_post(post.get_del_url())
+                logging.info("{0} delete success".format(post.get_title()))
+                delete_count += 1
+        logging.info("Judging finish , {0} tasks judged , {1} tasks delete".format(len(post_list), delete_count))
 
-    for post in post_list:
-        if tieba_judger.judge(post):
-            tieba_lawman.delete_post(post.get_del_url())
-            logging.info("{0} delete success".format(post.get_title()))
+        logging.info("Loop finish")
 
-    logging.info("All judge finished")
+        self.sleep()
 
-    time.sleep(random.randint(20, 30))
-
+    def sleep(self):
+        time.sleep(random.randint(20, 30))
 
 if __name__ == "__main__":
     logging.basicConfig(filename='log.txt', level=logging.DEBUG, format='%(asctime)s %(message)s')
     user_cookie, tieba_name = config_reader()
-    mainloop('dota2提问', user_cookie)
+    loop = EventLoop('dota2提问', user_cookie)
+    loop.loop()

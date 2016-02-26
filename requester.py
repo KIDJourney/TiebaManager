@@ -19,4 +19,9 @@ class Requester:
 
     @bs4_decorator
     def get_content(self, url):
+        """
+        Get content of url with cookie
+        :param url:
+        :return:
+        """
         return self.session_worker.get(url, cookies=self.cookie)
