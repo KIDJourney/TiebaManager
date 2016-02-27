@@ -58,6 +58,18 @@ def txNlpTextJudge(post):
 
     return response['negative'] > 0.75
 
+@__enable_method
+@judge_method_logger
+def patternCheck(post):
+    """
+    Check if title start with ['R', 'r', '【']
+    :param post:
+    :return boolean:
+    """
+    title = post.get_title()
+    start_chr = ['R', 'r', '【']
+    return title[0] not in start_chr
+
 
 @judge_method_logger
 def testJudge(post):
@@ -68,18 +80,6 @@ def testJudge(post):
     """
     post_title = post.get_title()
     return post_title[0] == 'H'
-
-
-@judge_method_logger
-def patternCheck(post):
-    """
-    Check if title start with ['R', 'r', '【']
-    :param post:
-    :return boolean:
-    """
-    title = post.get_title()
-    start_chr = ['R', 'r', '【']
-    return title[0] in start_chr
 
 
 if __name__ == "__main__":
