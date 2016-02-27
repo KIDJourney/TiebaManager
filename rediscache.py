@@ -1,6 +1,8 @@
-import redis
 import logging
-from urllib import parse
+import redis
+
+from common import get_post_id
+
 
 def postcache(func):
     """Decorator
@@ -9,6 +11,7 @@ def postcache(func):
     :param func:
     :return func:
     """
+
     def redischeck(instance, url_list):
         redisclient = redis.StrictRedis()
         url_not_cached = []
@@ -25,17 +28,6 @@ def postcache(func):
         return func(instance, url_not_cached)
 
     return redischeck
-
-def get_post_id(url):
-    """
-    Get post id from url
-    :param url:
-    :return string:
-    """
-    url = parse.urlparse(url)
-    query = url.query
-    post_id = parse.parse_qs(query)['kz']
-    return post_id
 
 # class PostCache:
 #     def __init__(self, func):

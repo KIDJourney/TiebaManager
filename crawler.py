@@ -2,7 +2,6 @@ from requester import Requester
 from common import config_reader, config_intervaltime
 import post
 import time
-import spamword
 import rediscache
 
 
@@ -33,8 +32,8 @@ class TiebaCrawler(Requester):
 
         url_list = [self.url_base + tag.get('href') for tag in post_a]
 
-        post_content_list = self.__get_content_list(url_list)
-        post_list = [post.Post(url, soup) for url, soup in zip(url_list, post_content_list)]
+        post_dict = self.__get_content_list(url_list)
+        post_list = [post.Post(url, soup) for url, soup in post_dict.items()]
 
         return post_list
 
@@ -43,12 +42,14 @@ class TiebaCrawler(Requester):
         """
         Get post content with given url list
         :param url_list:
-        :return list of string:
+        :return dict:
         """
-        content_list = []
+        content_list = {}
 
         for url in url_list:
-            content_list.append(self.get_content(url))
+            content = self.get_content(url)
+            if content:
+                content_list[url] = content
 
             time.sleep(config_intervaltime())
 

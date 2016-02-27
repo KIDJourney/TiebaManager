@@ -16,8 +16,8 @@ def judge_method_logger(func):
         judge_result = func(postobject)
 
         logging.info(
-                "Judging {0} {1} with {2}: {3}".format(postobject.get_title(), postobject.get_content(), func.__name__,
-                                                       str(judge_result)))
+            "Judging {0} {1} with {2}: {3}".format(postobject.get_title(), postobject.get_content(), func.__name__,
+                                                   str(judge_result)))
 
         return judge_result
 
@@ -58,7 +58,7 @@ def txNlpTextJudge(post):
 
     return response['negative'] > 0.75
 
-@__enable_method
+
 @judge_method_logger
 def patternCheck(post):
     """
@@ -71,6 +71,7 @@ def patternCheck(post):
     return title[0] not in start_chr
 
 
+@__enable_method
 @judge_method_logger
 def testJudge(post):
     """

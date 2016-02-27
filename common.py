@@ -1,18 +1,5 @@
-import bs4
 import configparser
-
-
-def bs4_decorator(function):
-    """
-    Decorator
-    Generator a soup from give html content
-    :param function:
-    :return:
-    """
-    def soup_generator(self, url):
-        return bs4.BeautifulSoup(function(self, url).text)
-
-    return soup_generator
+from urllib import parse
 
 
 def config_reader():
@@ -40,6 +27,18 @@ def config_intervaltime():
     config.read('config.ini')
 
     return int(config['setting']['requestinterval'])
+
+
+def get_post_id(url):
+    """
+    Get post id from url
+    :param url:
+    :return string:
+    """
+    url = parse.urlparse(url)
+    query = url.query
+    post_id = parse.parse_qs(query)['kz']
+    return post_id
 
 
 if __name__ == "__main__":
