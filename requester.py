@@ -49,6 +49,6 @@ class Requester:
 
                 logging.info('Get {0} succeed'.format(url))
                 return response
-            except requests.Timeout as e:
+            except requests.exceptions.ConnectionError as e:
                 logging.error('Get {0} failed : {1}'.format(common.get_post_id(url), e))
             logging.error('Trying again')
