@@ -2,7 +2,7 @@ import requests
 from constant import *
 import logging
 import bs4
-
+import common
 
 def bs4_decorator(function):
     """
@@ -11,6 +11,7 @@ def bs4_decorator(function):
     :param function:
     :return Soup , None:
     """
+
     def soup_generator(self, url):
         response = function(self, url)
         if response:  # May get a None if requests time out
@@ -22,8 +23,8 @@ def bs4_decorator(function):
 
 
 class Requester:
-    """Base class of requests maker like lawman and crawler 
-       Provided With Simple request function and bs decorator 
+    """Base class of requests maker like lawman and crawler
+       Provided With Simple request function and bs decorator
     """
 
     def __init__(self, tieba_name="steam", cookie=None):
@@ -42,12 +43,12 @@ class Requester:
         :param url:
         :return String or None:
         """
-        try:
-            response = self.session_worker.get(url, cookies=self.cookie, timeout=10)
+        while True:
+            try:
+                response = self.session_worker.get(url, cookies=self.cookie, timeout=10)
 
-            logging.info('Get {0} succeed'.format(url))
-
-            return response
-        except requests.Timeout as e:
-            logging.error('Get {0} failed : {1}'.format(url, e))
-            return None
+                logging.info('Get {0} succeed'.format(url))
+                return response
+            except requests.Timeout as e:
+                logging.error('Get {0} failed : {1}'.format(common.get_post_id(url), e))
+            logging.error('Trying again')
