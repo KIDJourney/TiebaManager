@@ -4,12 +4,13 @@ import logging
 import bs4
 import common
 
+
 def bs4_decorator(function):
-    """
-    Decorator
+    """Decorator
     Generator a soup from give html content
     :param function:
-    :return Soup , None:
+    :return Soup if content
+            None if None:
     """
 
     def soup_generator(self, url):
@@ -38,10 +39,10 @@ class Requester:
 
     @bs4_decorator
     def get_content(self, url):
-        """
-        Get content of url with cookie
+        """Get content of url with cookie
         :param url:
-        :return String or None:
+        :return String if success
+                None if failed:
         """
         while True:
             try:

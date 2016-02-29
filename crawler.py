@@ -11,7 +11,7 @@ class TiebaCrawler(Requester):
     """
 
     def __init__(self, tieba_name="steam", cookie=None):
-        """
+        """Initialize Crawler
         :param tieba_name:
         :param cookie:
         """
@@ -22,8 +22,7 @@ class TiebaCrawler(Requester):
         pass
 
     def get_posts(self):
-        """
-        Get all posts on first page of tieba , and generate a post objects list
+        """Get all posts on first page of tieba , and generate a post objects list
         :return list of Post object:
         """
         soup = self.get_content(self.tieba_base)
@@ -39,8 +38,7 @@ class TiebaCrawler(Requester):
 
     @rediscache.postcache
     def __get_content_list(self, url_list):
-        """
-        Get post content with given url list
+        """Get post content with given url list
         :param url_list:
         :return dict:
         """
@@ -56,8 +54,7 @@ class TiebaCrawler(Requester):
         return content_list
 
     def __get_posts_a(self, soup):
-        """
-        Get all post url from the soup of first page of tieba
+        """Get all post url from the soup of first page of tieba's first page
         :param soup:
         :return list of posts' url:
         """

@@ -4,11 +4,9 @@ from constant import *
 
 
 class Lawman(Requester):
-    """Posts and Users opeartor unit 
-
+    """Posts and Users operator unit
        Delete post with post url
-
-       Ban user with post url(Not avaiable now)
+       Ban user with post url(Not available now)
     """
 
     def __init__(self, tieba_name="steam", cookie=None):
