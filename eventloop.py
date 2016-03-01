@@ -9,6 +9,9 @@ from common import config_reader
 
 
 class EventLoop:
+    """Main process of the work.
+    Crawling Data (TiebaCrawler) -> Generate Post Objects (Post) -> Judge with info (Judger) -> Operator with post (Lawman)
+    """
     def __init__(self, tieba_name='steam', cookie=None):
         self.tieba_name = tieba_name
         self.tieba_crawler = crawler.TiebaCrawler(tieba_name, cookie)

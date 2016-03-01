@@ -3,6 +3,16 @@ from constant import *
 
 
 class PostBase:
+    """Base structure to describe element in tieba
+    Attributes :
+    title
+    content
+    author
+    time
+    del_url
+    ban_url
+    """
+
     def __init__(self):
         self.title = ''
         self.content = ''
@@ -17,8 +27,7 @@ class PostBase:
 \tAuthor: {1}
 \tTime: {2}
 \tDel_url: {3}
-\tBan_url: {4}
-        """.format(self.content, self.author, self.time, self.del_url, self.ban_url)
+\tBan_url: {4}""".format(self.content, self.author, self.time, self.del_url, self.ban_url)
 
     def get_content(self):
         return self.content
@@ -36,28 +45,10 @@ class PostBase:
         return self.ban_url
 
 
-class Reply(PostBase):
-    def __init__(self, tag=None):
-        if tag is None:
-            raise Exception("The tag must be provided")
-        PostBase.__init__(self)
-        self.__soup_analyze_reply(tag)
-
-    def __soup_analyze_reply(self, tag):
-        post_info = list(tag.stripped_strings)
-        self.content = ''.join(post_info[:-5])
-        self.content = self.content[self.content.find('楼') + 2:].strip()
-        self.time = post_info[-4]
-        self.author = post_info[-5]
-
-        self.del_url = tag.find('a', {'class': 'delete'}).get('href')
-        self.del_url = TIEBA_MOBILE_URL + self.del_url
-
-        self.ban_url = tag.find('a', {'class': 'banned'}).get('href')
-        self.ban_url = TIEBA_MOBILE_URL + self.ban_url
-
-
 class Post(PostBase):
+    """Structure to describe post , provide replay of post info (1 page at present)
+    """
+
     def __init__(self, url, soup=None):
         if soup is None:
             raise Exception("The soup must be provided")
@@ -99,6 +90,29 @@ class Post(PostBase):
         self.del_url = TIEBA_MOBILE_URL + self.del_url
 
         self.ban_url = post.find('a', {'class': 'banned'}).get('href')
+        self.ban_url = TIEBA_MOBILE_URL + self.ban_url
+
+
+class Reply(PostBase):
+    """Structure describe reply of Post
+    """
+    def __init__(self, tag=None):
+        if tag is None:
+            raise Exception("The tag must be provided")
+        PostBase.__init__(self)
+        self.__soup_analyze_reply(tag)
+
+    def __soup_analyze_reply(self, tag):
+        post_info = list(tag.stripped_strings)
+        self.content = ''.join(post_info[:-5])
+        self.content = self.content[self.content.find('楼') + 2:].strip()
+        self.time = post_info[-4]
+        self.author = post_info[-5]
+
+        self.del_url = tag.find('a', {'class': 'delete'}).get('href')
+        self.del_url = TIEBA_MOBILE_URL + self.del_url
+
+        self.ban_url = tag.find('a', {'class': 'banned'}).get('href')
         self.ban_url = TIEBA_MOBILE_URL + self.ban_url
 
 
