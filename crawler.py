@@ -3,6 +3,7 @@ from common import config_reader, config_intervaltime
 import post
 import time
 import rediscache
+import logging
 
 
 class TiebaCrawler(Requester):
@@ -17,9 +18,31 @@ class TiebaCrawler(Requester):
         """
         Requester.__init__(self, tieba_name, cookie)
 
-    def __avaiable_check(self):
-        # response = self.session_worker
-        pass
+        self.__available_check()
+
+    def __available_check(self):
+        """
+        Checking cookie available , tieba existence , manage rights validity
+        :return boolean:
+        """
+        logging.info("Doing available_check")
+
+        response = self.session_worker.get(self.tieba_base).text
+        if "参与本吧讨论请先" in response:
+            logging.warning("Doing available_check : FAILED")
+            raise Exception("User Cookie not available")
+
+        logging.info("Checked")
+
+        logging.info("Checking tieba existence......")
+        if "尚未建立" in response:
+            logging.warning("Checking tieba existence : FAILED")
+            raise Exception("Tieba doesn't exist")
+
+        logging.info("Checked")
+
+        logging.info("All check done")
+        return True
 
     def get_posts(self):
         """Get all posts on first page of tieba , and generate a post objects list
