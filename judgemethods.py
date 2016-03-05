@@ -3,11 +3,17 @@ import json
 import time
 import logging
 
-ENABLED_METHOD_LIST = []
+POST_METHOD_LIST = []
+REPLY_METHOD_LIST = []
 
 
-def __enable_method(func):
-    ENABLED_METHOD_LIST.append(func)
+def reply_method(func):
+    REPLY_METHOD_LIST.append(func)
+    return func
+
+
+def post_method(func):
+    POST_METHOD_LIST.append(func)
     return func
 
 
@@ -71,7 +77,6 @@ def patternCheck(post):
     return title[0] not in start_chr
 
 
-@__enable_method
 @judge_method_logger
 def testJudge(post):
     """
@@ -81,6 +86,17 @@ def testJudge(post):
     """
     post_title = post.get_title()
     return post_title[0] == 'H'
+
+
+@reply_method
+@judge_method_logger
+def replyTestJudge(reply):
+    """Judge Method form Debugging
+    :param reply:
+    :return:
+    """
+    reply_content = reply.get_content()
+    return reply_content[0] == 'H'
 
 
 if __name__ == "__main__":
