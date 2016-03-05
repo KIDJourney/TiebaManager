@@ -44,6 +44,9 @@ class PostBase:
     def get_ban_url(self):
         return self.ban_url
 
+    def get_title(self):
+        return "reply"
+
 
 class Post(PostBase):
     """Structure to describe post , provide replay of post info (1 page at present)
