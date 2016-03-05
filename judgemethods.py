@@ -88,7 +88,6 @@ def testJudge(post):
     return post_title[0] == 'H'
 
 
-@reply_method
 @judge_method_logger
 def replyTestJudge(reply):
     """Judge Method form Debugging
@@ -97,6 +96,12 @@ def replyTestJudge(reply):
     """
     reply_content = reply.get_content()
     return reply_content[0] == 'H'
+
+
+@reply_method
+@judge_method_logger
+def keyWordDected(reply):
+    return "套现" in reply.get_content()
 
 
 if __name__ == "__main__":
