@@ -27,7 +27,8 @@ class TiebaCrawler(Requester):
         """
         logging.info("Doing available_check")
 
-        response = self.session_worker.get(self.tieba_base).text
+        response = self.get_content(self.tieba_base)
+
         if "参与本吧讨论请先" in response:
             logging.warning("Doing available_check : FAILED")
             raise Exception("User Cookie not available")
