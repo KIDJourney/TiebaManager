@@ -15,7 +15,7 @@ class EventLoop:
     def __init__(self, tieba_name='steam', cookie=None):
         self.tieba_name = tieba_name
         self.tieba_crawler = crawler.TiebaCrawler(tieba_name, cookie)
-        self.tieba_judger = judger.Judger(judgemethods.ENABLED_METHOD_LIST)
+        self.tieba_judger = judger.Judger(judgemethods.POST_METHOD_LIST, judgemethods.REPLY_METHOD_LIST)
         self.tieba_lawman = lawman.Lawman(tieba_name, cookie)
 
     def loop(self):
@@ -24,13 +24,33 @@ class EventLoop:
         logging.info("Crawling finish : {0}".format(self.tieba_name))
 
         logging.info('Judging Start , {0} tasks in queue'.format(len(post_list)))
-        delete_count = 0
+
+        post_delete_count = 0
+
+        reply_delete_count = 0
+        reply_count = 0
+
         for post in post_list:
-            if self.tieba_judger.judge(post):
-                self.tieba_lawman.delete_post(post.get_del_url())
-                logging.info("{0} delete success".format(post.get_title()))
-                delete_count += 1
-        logging.info("Judging finish , {0} tasks judged , {1} tasks delete".format(len(post_list), delete_count))
+            if self.tieba_judger.post_judge(post):
+                if self.tieba_lawman.delete_post(post.get_del_url()):
+                    logging.info("Post : {0} delete success".format(post.get_title()))
+                    post_delete_count += 1
+                else:
+                    logging.error("Post : {0} delete Failed !".format(post.get_title()))
+
+            else:
+                reply_count += len(post.reply_list)
+                for reply in post.reply_list:
+                    if self.tieba_judger.reply_judge(reply):
+                        if self.tieba_lawman.delete_post(reply.get_del_url()):
+                            logging.info("Reply {0} delete success".format(post.get_content()))
+                            reply_delete_count += 1
+                        else:
+                            logging.error("{0} delete Failed !".format(reply.get_content()))
+
+        logging.info(
+            "Judging finish , {0} post(s) judged , {1} post(s) delete , {2} reply(s) judged , {3} reply(s) delete.".format(
+                len(post_list), post_delete_count, reply_count, reply_delete_count))
 
         logging.info("Loop finish")
 
@@ -38,6 +58,7 @@ class EventLoop:
 
     def sleep(self):
         time.sleep(random.randint(20, 30))
+
 
 if __name__ == "__main__":
     logging.basicConfig(filename='log.txt', level=logging.DEBUG, format='%(asctime)s %(message)s')
