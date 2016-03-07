@@ -37,9 +37,19 @@ You can use ```Tmux``` or something similar to run it in backgroud .
 
 You can implement your own judge method in ```judgemethods.py``` .
 
+There are two kind of method you can write yourself .
+
+### Post judge method
+
 The method is implemented as a function . Accept a ```Post``` object as argument .
 
-Make sure you register your method with the ```__enable_method``` decorator.
+Make sure you register your method with the ```post_method``` decorator.
+
+### Reply judge method
+
+The method is implemented as a function . Accept a ```Reply``` object as argument .
+
+Make sure you register your method with the ```reply_method``` decorator.
 
 ## Warning
 
