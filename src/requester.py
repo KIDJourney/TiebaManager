@@ -32,6 +32,7 @@ class Requester:
         if cookie is None:
             raise Exception("Cookie must be provided")
 
+        self.tieba_name = tieba_name
         self.session_worker = requests.Session()
         self.cookie = cookie
         self.tieba_base = TIEBA_MOBILE_BASE_URL.format(tieba_name=tieba_name)
