@@ -13,7 +13,12 @@ def postcache(func):
     """
 
     def redischeck(instance, url_list):
-        redisclient = redis.StrictRedis()
+        try:
+            redisclient = redis.StrictRedis()
+        except Exception as e:
+            logging.error('Redis server connect error')
+            raise e
+
         url_not_cached = []
         for url in url_list:
             post_id = get_post_id(url)
