@@ -10,8 +10,8 @@ from common import config_reader
 
 class EventLoop:
     """Main process of the work.
-    Crawling Data (TiebaCrawler) -> Generate Post Objects (Post) -> Judge with info (Judger) -> Operator with post (Lawman)
     """
+
     def __init__(self, tieba_name='steam', cookie=None):
         self.tieba_name = tieba_name
         self.tieba_crawler = crawler.TiebaCrawler(tieba_name, cookie)
@@ -19,12 +19,28 @@ class EventLoop:
         self.tieba_lawman = lawman.Lawman(tieba_name, cookie)
 
     def loop(self):
+        """Main Loop of the work :
+        Work flow :
+        Crawling Data (TiebaCrawler) -> Generate Post Objects (Post) -> Judge with info (Judger) -> Operator with post (Lawman)
+        :return :
+        """
         logging.info('Crawling start : {0}'.format(self.tieba_name))
         post_list = self.tieba_crawler.get_posts()
         logging.info("Crawling finish : {0}".format(self.tieba_name))
 
         logging.info('Judging Start , {0} tasks in queue'.format(len(post_list)))
 
+        post_delete_count, reply_delete_count, reply_count = self.judge(post_list)
+
+        logging.info(
+            "Judging finish , {0} post(s) judged , {1} post(s) delete , {2} reply(s) judged , {3} reply(s) delete.".format(
+                len(post_list), post_delete_count, reply_count, reply_delete_count))
+
+        logging.info("Loop finish")
+
+        self.sleep()
+
+    def judge(self, post_list):
         post_delete_count = 0
 
         reply_delete_count = 0
@@ -48,13 +64,7 @@ class EventLoop:
                         else:
                             logging.error("{0} delete Failed !".format(reply.get_content()))
 
-        logging.info(
-            "Judging finish , {0} post(s) judged , {1} post(s) delete , {2} reply(s) judged , {3} reply(s) delete.".format(
-                len(post_list), post_delete_count, reply_count, reply_delete_count))
-
-        logging.info("Loop finish")
-
-        self.sleep()
+        return post_delete_count, reply_delete_count, reply_count
 
     def sleep(self):
         time.sleep(random.randint(20, 30))
