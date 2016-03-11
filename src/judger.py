@@ -13,7 +13,7 @@ class Judger:
         """
         if not isinstance(post_method, collections.Iterable):
             raise Exception("The post judge method must be iterable")
-        if not isinstance(reply_method , collections.Iterable):
+        if not isinstance(reply_method, collections.Iterable):
             raise Exception("The reply judge method must be iterable")
 
         self.post_methods = post_method
@@ -22,6 +22,7 @@ class Judger:
     def post_judge(self, postobject):
         """Judge the post with all post judge method the judger have.
         :param Post postobject:
+www
         :return boolean:
         """
         for method in self.post_methods:
@@ -34,24 +35,7 @@ class Judger:
         :param reply_object:
         :return boolean:
         """
-        for method in self.reply_methods :
-            if method(reply_object) :
+        for method in self.reply_methods:
+            if method(reply_object):
                 return True
         return False
-
-    def __judge(self, postobject):
-        """
-        Judge the post and post reply with all methods the judger have
-        :param postobject:
-        :return:
-        """
-        pass
-
-    def add_method(self, method):
-        """Add method to the instance
-        :param callable method:
-        :return:
-        """
-        if not callable(method):
-            raise Exception("The method you add must implement JudgeBase")
-        self.post_methods.append(method)
