@@ -8,7 +8,7 @@ import logging
 
 class TiebaCrawler(Requester):
     """ Post crawler  , gather information of posts in given bar
-        can't get image submmited in post
+        can't get image submitted in post
     """
 
     def __init__(self, tieba_name="steam", cookie=None):
@@ -38,7 +38,7 @@ class TiebaCrawler(Requester):
         logging.info("Checking tieba existence......")
         if "尚未建立" in response:
             logging.warning("Checking tieba existence : FAILED")
-            raise Exception("Tieba doesn't exist")
+            raise Exception("{0} doesn't exist".format(self.tieba_name))
 
         logging.info("Checked")
 
@@ -51,14 +51,25 @@ class TiebaCrawler(Requester):
         """
         soup = self.get_content(self.tieba_base)
 
-        post_a = self.__get_posts_a(soup)
+        post_attr = self.__get_posts_url_postfix(soup)
 
-        url_list = [self.url_base + tag.get('href') for tag in post_a]
+        url_list = [self.url_base + tag for tag in post_attr]
 
         post_dict = self.__get_content_list(url_list)
         post_list = [post.Post(url, soup) for url, soup in post_dict.items()]
 
         return post_list
+
+    def __get_posts_url_postfix(self, soup):
+        """Get all post url postfix from the soup of first page of first page
+        :param soup:
+        :return list of posts' postfix url:
+        """
+        posts_list = soup.findAll('div', {'class': 'i'})
+        # find divs of all posts
+        posts_list = [tag.find('a').get('href') for tag in posts_list if not tag.find('span', {'class': 'light'})]
+        # get all url postfix of post except 精品贴
+        return posts_list
 
     @rediscache.postcache
     def __get_content_list(self, url_list):
@@ -77,21 +88,12 @@ class TiebaCrawler(Requester):
 
         return content_list
 
-    def __get_posts_a(self, soup):
-        """Get all post url from the soup of first page of tieba's first page
-        :param soup:
-        :return list of posts' url:
-        """
-        posts_list = soup.findAll('div', {'class': 'i'})
-        posts_list = [tag.find('a') for tag in posts_list if not tag.find('span', {'class': 'light'})]
-        return posts_list
-
 
 if __name__ == "__main__":
     cookie, _ = config_reader()
     tieba_worker = TiebaCrawler(cookie=cookie, tieba_name='dota2提问')
     posts = tieba_worker.get_posts()
-    print(len(list(map(str, posts))))
+    print((list(map(str, posts))))
     posts = tieba_worker.get_posts()
-    print(len(list(map(str, posts))))
+    print((list(map(str, posts))))
     # print(list(map(str, posts[0].reply_list)))
