@@ -1,5 +1,22 @@
 from bs4 import BeautifulSoup
 from constant import *
+from urllib import parse
+
+
+def get_pid_fid_zid(ban_url):
+    """
+    Get pid and fid from delete url
+    :param ban_url:
+    :return:
+    """
+    query = parse.urlparse(ban_url).query
+    query_parse = parse.parse_qs(query)
+
+    pid = query_parse['pid'][0]
+    fid = query_parse['fid'][0]
+    zid = query_parse['z'][0]
+
+    return pid, fid, zid
 
 
 class PostBase:
@@ -20,14 +37,18 @@ class PostBase:
         self.time = ''
         self.del_url = ''
         self.ban_url = ''
+        self.fid = ''
+        self.pid = ''
+        self.zid = ''
+
+    def get_pid_sid(self):
+        ban_url = self.ban_url
+
+        self.pid, self.fid , self.zid = get_pid_fid_zid(ban_url)
 
     def __str__(self):
-        return """
-\tContent: {0}
-\tAuthor: {1}
-\tTime: {2}
-\tDel_url: {3}
-\tBan_url: {4}""".format(self.content, self.author, self.time, self.del_url, self.ban_url)
+        return """\tContent: {0}\n\tAuthor: {1}\n\tTime: {2}\n\tDel_url: {3}\n\tBan_url: {4}""".format(
+            self.content, self.author, self.time, self.del_url, self.ban_url)
 
     def get_content(self):
         return self.content
@@ -60,6 +81,8 @@ class Post(PostBase):
         self.url = url
         self.reply_list = []
         self.__soup_analyze(soup)
+
+        self.get_pid_sid()
 
     def get_url(self):
         return self.url
@@ -99,11 +122,14 @@ class Post(PostBase):
 class Reply(PostBase):
     """Structure describe reply of Post
     """
+
     def __init__(self, tag=None):
         if tag is None:
             raise Exception("The tag must be provided")
         PostBase.__init__(self)
         self.__soup_analyze_reply(tag)
+
+        self.get_pid_sid()
 
     def __soup_analyze_reply(self, tag):
         post_info = list(tag.stripped_strings)
