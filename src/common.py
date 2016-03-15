@@ -38,7 +38,7 @@ def get_post_id(url):
     url = parse.urlparse(url)
     query = url.query
     post_id = parse.parse_qs(query)['kz']
-    return post_id
+    return post_id[0]
 
 
 if __name__ == "__main__":
