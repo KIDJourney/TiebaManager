@@ -32,8 +32,13 @@ class Requester:
         if cookie is None:
             raise Exception("Cookie must be provided")
 
+        cookie_jar = requests.utils.cookiejar_from_dict(cookie)
+
         self.tieba_name = tieba_name
+
         self.session_worker = requests.Session()
+        self.session_worker.cookies = cookie_jar
+
         self.cookie = cookie
         self.tieba_base = TIEBA_MOBILE_BASE_URL.format(tieba_name=tieba_name)
         self.url_base = TIEBA_URL
@@ -47,7 +52,7 @@ class Requester:
         """
         while True:
             try:
-                response = self.session_worker.get(url, cookies=self.cookie, timeout=10)
+                response = self.session_worker.get(url, timeout=10)
 
                 logging.info('Get {0} succeed'.format(url))
                 return response
