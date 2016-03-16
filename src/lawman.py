@@ -63,31 +63,23 @@ class Lawman(Requester):
 
         return '成功删除' in delete_result.text
 
-    def ban_user(self, post_url, author, reason):
+    def ban_user(self, post, reason):
         """
         Ban the author of post
-        :param post_url:
-        :param author:
+        :param post:
         :param reason:
         :return:
         """
-        post_id = get_post_id(post_url)
-        post_url = "http://tieba.baidu.com/p/{0}".format(post_id)
-        response = self.get_content(post_url)
+        tbs = self.__get_tbs(post.get_url())
+        fid = post.fid
+        pid = post.pid
 
-        tbs = self.tbs_re.search(response.text).group(1)
-        fid = self.fid_re.search(response.text).group(1)
+        form_data = {'day': 1, 'fid': fid, 'tbs': tbs, 'ie': 'gbk', 'user_name[]': post.get_author(), 'pid[]': pid,
+                     'reason': reason}
 
-        data_field = response.find('div', {'class': 'l_post l_post_bright j_l_post clearfix  '}).get('data-field')
-        json_object = json.loads(data_field)
-        pid = json_object['content']['post_id']
+        response = self.session_worker.post(self.ban_url, data=form_data).json()
 
-        form_data = {'day': 1, 'fid': fid, 'tbs': tbs, 'ie': 'gbk', 'user_name[]': author, 'pid[]': pid,
-                     'reason': 'Test'}
-
-        response = self.session_worker.post(self.ban_url, data=form_data)
-
-        return response.text
+        return response['errno'] == 0
 
     def __get_tbs(self, post_url):
         """
