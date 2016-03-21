@@ -3,12 +3,14 @@ import collections
 
 
 class Judger:
-    """Post judge
+    """
+    Post judge
     Classify a post into legal or illegal
     """
 
     def __init__(self, post_method, reply_method):
-        """Accept a list of judgemethod
+        """
+        Accept a list of judgemethod
         :param Iterable post_method:
         """
         if not isinstance(post_method, collections.Iterable):
@@ -20,9 +22,9 @@ class Judger:
         self.reply_methods = reply_method
 
     def post_judge(self, postobject):
-        """Judge the post with all post judge method the judger have.
+        """
+        Judge the post with all post judge method the judger have.
         :param Post postobject:
-www
         :return boolean:
         """
         for method in self.post_methods:
@@ -31,7 +33,8 @@ www
         return False
 
     def reply_judge(self, reply_object):
-        """Judge the reply with all reply judge method the judger have.
+        """
+        Judge the reply with all reply judge method the judger have.
         :param reply_object:
         :return boolean:
         """

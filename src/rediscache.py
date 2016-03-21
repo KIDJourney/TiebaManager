@@ -5,7 +5,8 @@ from common import get_post_id
 
 
 def postcache(func):
-    """Decorator
+    """
+    Decorator
     Cache the post url that have been crawled
     Check if the post have been crawled
     :param func:

@@ -6,7 +6,8 @@ import common
 
 
 def bs4_decorator(function):
-    """Decorator
+    """
+    Decorator
     Generator a soup from give html content
     :param function:
     :return Soup if content
@@ -24,8 +25,9 @@ def bs4_decorator(function):
 
 
 class Requester:
-    """Base class of requests maker like lawman and crawler
-       Provided With Simple request function and bs decorator
+    """
+    Base class of requests maker like lawman and crawler
+    Provided With Simple request function and bs decorator
     """
 
     def __init__(self, tieba_name="steam", cookie=None):
@@ -45,7 +47,8 @@ class Requester:
 
     @bs4_decorator
     def get_content(self, url):
-        """Get content of url with cookie
+        """
+        Get content of url with cookie
         :param url:
         :return String if success
                 None if failed:

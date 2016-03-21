@@ -90,7 +90,8 @@ def testJudge(post):
 
 @judge_method_logger
 def replyTestJudge(reply):
-    """Judge Method form Debugging
+    """
+    Judge Method form Debugging
     :param reply:
     :return:
     """

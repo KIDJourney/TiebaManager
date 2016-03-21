@@ -7,12 +7,14 @@ import logging
 
 
 class TiebaCrawler(Requester):
-    """ Post crawler  , gather information of posts in given bar
-        can't get image submitted in post
+    """
+    Post crawler  , gather information of posts in given bar
+    can't get image submitted in post
     """
 
     def __init__(self, tieba_name="steam", cookie=None):
-        """Initialize Crawler
+        """
+        Initialize Crawler
         :param tieba_name:
         :param cookie:
         """
@@ -46,7 +48,8 @@ class TiebaCrawler(Requester):
         return True
 
     def get_posts(self):
-        """Get all posts on first page of tieba , and generate a post objects list
+        """
+        Get all posts on first page of tieba , and generate a post objects list
         :return list of Post object:
         """
         soup = self.get_content(self.tieba_base)
@@ -61,7 +64,8 @@ class TiebaCrawler(Requester):
         return post_list
 
     def __get_posts_url_postfix(self, soup):
-        """Get all post url postfix from the soup of first page of first page
+        """
+        Get all post url postfix from the soup of first page of first page
         :param soup:
         :return list of posts' postfix url:
         """
@@ -73,7 +77,8 @@ class TiebaCrawler(Requester):
 
     @rediscache.postcache
     def __get_content_list(self, url_list):
-        """Get post content with given url list
+        """
+        Get post content with given url list
         :param url_list:
         :return dict:
         """

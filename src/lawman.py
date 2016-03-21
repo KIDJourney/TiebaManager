@@ -7,9 +7,10 @@ import json
 import re
 
 class Lawman(Requester):
-    """Posts and Users operator unit
-       Delete post with post url
-       Ban user with post url(Not available now)
+    """
+    Posts and Users operator unit
+    Delete post with post url
+   Ban user with post url(Not available now)
     """
 
     def __init__(self, tieba_name="steam", cookie=None):
@@ -51,7 +52,8 @@ class Lawman(Requester):
         return "成功删除" in response.text
 
     def delete_post(self, delete_page_url):
-        """Delete given url
+        """
+        Delete given url
         :param delete_page_url:
         :return boolean:
         """

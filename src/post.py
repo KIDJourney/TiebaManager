@@ -20,14 +20,8 @@ def get_pid_fid_zid(ban_url):
 
 
 class PostBase:
-    """Base structure to describe element in tieba
-    Attributes :
-    title
-    content
-    author
-    time
-    del_url
-    ban_url
+    """
+    Base structure to describe element in tieba
     """
 
     def __init__(self):
@@ -70,7 +64,8 @@ class PostBase:
 
 
 class Post(PostBase):
-    """Structure to describe post , provide replay of post info (1 page at present)
+    """
+    Structure to describe post , provide replay of post info (1 page at present)
     """
 
     def __init__(self, url, soup=None):
@@ -120,7 +115,8 @@ class Post(PostBase):
 
 
 class Reply(PostBase):
-    """Structure describe reply of Post
+    """
+    Structure describe reply of Post
     """
 
     def __init__(self, tag=None):
