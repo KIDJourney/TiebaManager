@@ -42,3 +42,20 @@ class Judger:
             if method(reply_object):
                 return True
         return False
+
+    def update_judge_method(self, post_method, replay_method):
+        """
+        Reset judge methods
+        :param post_method:
+        :param replay_method:
+        :return:
+        """
+        self.post_methods = post_method
+        self.reply_methods = replay_method
+
+    def is_post_judge_empty(self):
+        return len(self.post_methods) == 0
+
+    def is_reply_judge_empty(self):
+        return len(self.reply_methods) == 0
+
