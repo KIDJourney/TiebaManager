@@ -64,7 +64,7 @@ def txNlpTextJudge(post):
 
     return response['negative'] > 0.75
 
-
+@post_method
 @judge_method_logger
 def patternCheck(post):
     """
@@ -73,7 +73,7 @@ def patternCheck(post):
     :return boolean:
     """
     title = post.get_title()
-    start_chr = ['R', 'r', '【']
+    start_chr = ['R', 'r', '【','[']
     return title[0] not in start_chr
 
 
@@ -99,11 +99,10 @@ def replyTestJudge(reply):
     return reply_content[0] == 'H'
 
 
-@reply_method
 @judge_method_logger
 def keyWordDected(reply):
     return "套现" in reply.get_content()
 
 
 if __name__ == "__main__":
-    title = '求送'
+    pass
