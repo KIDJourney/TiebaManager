@@ -4,6 +4,36 @@ import redis
 from common import get_post_id
 
 
+class postcache_dev:
+    """
+    Avoid many times connection to redis
+    Untested
+    """
+    def __init__(self):
+        try:
+            self.redisclient = redis.StrictRedis()
+        except Exception as e:
+            logging.error("Redis server connect error")
+            raise Exception("Redis error %s " % str(e))
+
+    def __call__(self, get_content_method):
+        def cache_check(instance, url_list):
+            url_not_cached = []
+            for url in url_list:
+                post_id = get_post_id(url)
+                if self.redisclient.get(post_id):
+                    logging.info('Cache %s hit' % post_id)
+                    self.redisclient.expire(post_id, 600)
+                else:
+                    logging.info('Caching %s' % post_id)
+                    self.redisclient.set(post_id, 'True')
+                    self.redisclient.expire(post_id, 600)
+                    url_not_cached.append(url)
+            return get_content_method(instance, url_not_cached)
+
+        return cache_check
+
+
 def postcache(func):
     """
     Decorator
