@@ -1,16 +1,15 @@
 from requester import Requester
 from common import config_reader
-from common import get_post_id
 from constant import *
 import urllib
-import json
 import re
+
 
 class Lawman(Requester):
     """
     Posts and Users operator unit
     Delete post with post url
-   Ban user with post url(Not available now)
+    Ban user with post url(Not available now)
     """
 
     def __init__(self, tieba_name="steam", cookie=None):
@@ -25,9 +24,6 @@ class Lawman(Requester):
         :param post:
         :return:
         """
-        # example url
-        # http://tieba.baidu.com/mo/m?tn=baiduManagerSubmit&ntn=bdKSW&tbs=eeaa66acc8d89a801458040109&pn=0&nlm=11&word=dota2%E6%8F%90%E9%97%AE&fid=10999371&z=3852933223
-        # base url http://tieba.baidu.com/mo/m?
         # parameters
         zid = post.zid
         fid = post.fid
@@ -48,7 +44,8 @@ class Lawman(Requester):
                    'word': self.tieba_name,
                    'z': zid}
 
-        response = self.get_content(operator_url + urllib.parse.urlencode(payload))
+        delete_url = operator_url + urllib.parse.urlencode(payload)
+        response = self.get_content(delete_url)
         return "成功删除" in response.text
 
     def delete_post(self, delete_page_url):
@@ -86,8 +83,8 @@ class Lawman(Requester):
     def __get_tbs(self, post_url):
         """
         Get tbs(token)
-        :param A random post_url:
-        :return:
+        :param post_url:
+        :return string:
         """
         response = self.get_content(post_url)
 
