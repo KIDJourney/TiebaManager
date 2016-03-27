@@ -34,7 +34,7 @@ class EventLoop:
         """
         logging.info("New loop begin")
         self.reload_judge_method()
-        #
+
         logging.info('Crawling start : {0}'.format(self.tieba_name))
         post_list = self.tieba_crawler.get_posts()
         logging.info("Crawling finish : {0}".format(self.tieba_name))
