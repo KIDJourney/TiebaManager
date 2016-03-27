@@ -34,14 +34,14 @@ class Requester:
         if cookie is None:
             raise Exception("Cookie must be provided")
 
-        cookie_jar = requests.utils.cookiejar_from_dict(cookie)
-
         self.tieba_name = tieba_name
 
+        self.cookie = cookie
+        # inject the cookie jar to session instance
+        cookie_jar = requests.utils.cookiejar_from_dict(cookie)
         self.session_worker = requests.Session()
         self.session_worker.cookies = cookie_jar
 
-        self.cookie = cookie
         self.tieba_base = TIEBA_MOBILE_BASE_URL.format(tieba_name=tieba_name)
         self.url_base = TIEBA_URL
 
@@ -53,12 +53,14 @@ class Requester:
         :return String if success
                 None if failed:
         """
-        while True:
-            try:
-                response = self.session_worker.get(url, timeout=10)
+        try:
+            response = self.session_worker.get(url, timeout=10)
 
-                logging.info('Get {0} succeed'.format(url))
-                return response
-            except requests.Timeout as e:
-                logging.error('Get {0} failed : {1}'.format(common.get_post_id(url), e))
-            logging.error('Trying again')
+            logging.info('Get {0} succeed'.format(url))
+            return response
+        except requests.Timeout as e:
+            logging.warning('Get {0} failed : {1}'.format(common.get_post_id(url), e))
+        except Exception as e:
+            logging.warning('Get {0} failed : unexpected :{1} '.format(common.get_post_id(url), e))
+
+        return None
