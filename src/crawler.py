@@ -32,14 +32,14 @@ class TiebaCrawler(Requester):
         response = self.get_content(self.tieba_base)
 
         if "参与本吧讨论请先" in response:
-            logging.warning("Doing available_check : FAILED")
+            logging.error("Doing available_check : FAILED")
             raise Exception("User Cookie not available")
 
         logging.info("Checked")
 
         logging.info("Checking tieba existence......")
         if "尚未建立" in response:
-            logging.warning("Checking tieba existence : FAILED")
+            logging.error("Checking tieba existence : FAILED")
             raise Exception("{0} doesn't exist".format(self.tieba_name))
 
         logging.info("Checked")
@@ -72,7 +72,7 @@ class TiebaCrawler(Requester):
         posts_list = soup.findAll('div', {'class': 'i'})
         # find divs of all posts
         posts_list = [tag.find('a').get('href') for tag in posts_list if not tag.find('span', {'class': 'light'})]
-        # get all url postfix of post except 精品贴
+        # get all url postfixes of posts except excellent post
         return posts_list
 
     @rediscache.postcache

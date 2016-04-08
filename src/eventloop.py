@@ -67,6 +67,9 @@ class EventLoop:
         logging.info("Loop finish")
 
     def reload_judge_method(self):
+        """
+        Reload the judge method
+        """
         try:
             logging.info("Trying to reload judge methods")
             importlib.reload(judgemethods)
@@ -77,6 +80,15 @@ class EventLoop:
             self.tieba_judger.update_judge_method(judgemethods.POST_METHOD_LIST, judgemethods.REPLY_METHOD_LIST)
 
     def judge(self, post_list):
+        """
+        Judge process of loop
+
+        if post doesn't pass the judge :
+            Delete by calling lawman
+        else :
+            if the reply in post doesn't pass the judge :
+                Delete by calling lawman
+        """
         post_delete_count = 0
 
         reply_delete_count = 0
@@ -103,6 +115,9 @@ class EventLoop:
         return post_delete_count, reply_delete_count, reply_count
 
     def sleep(self):
+        """
+        Sleep random time after each loops.
+        """
         time.sleep(random.randint(20, 30))
 
 

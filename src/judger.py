@@ -14,9 +14,9 @@ class Judger:
         :param Iterable post_method:
         """
         if not isinstance(post_method, collections.Iterable):
-            raise Exception("The post judge method must be iterable")
+            raise Exception("The post judge method must be iterable(list or tuple)")
         if not isinstance(reply_method, collections.Iterable):
-            raise Exception("The reply judge method must be iterable")
+            raise Exception("The reply judge method must be iterable(list or tuple)")
 
         self.post_methods = post_method
         self.reply_methods = reply_method

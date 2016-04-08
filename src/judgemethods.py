@@ -64,6 +64,7 @@ def txNlpTextJudge(post):
 
     return response['negative'] > 0.75
 
+
 @post_method
 @judge_method_logger
 def patternCheck(post):
