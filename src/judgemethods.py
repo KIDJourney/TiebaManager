@@ -52,13 +52,15 @@ def txNlpTextJudge(post):
     :return:
     """
     url = "http://nlp.qq.com/public/wenzhi/api/common_api.php"
-    body = {'url_path': 'http://10.209.0.215:55000/text/sentiment',
+    body = {'api':6,
             'body_data': ""}
 
     content = json.dumps({'content': post.get_title() + post.get_content()})
     body['body_data'] = content
 
     response = requests.post(url, data=body).json()
+
+    print(response)
 
     time.sleep(1)
 
@@ -106,4 +108,12 @@ def keyWordDected(reply):
 
 
 if __name__ == "__main__":
-    pass
+    class foo():
+        pass
+
+    f = foo()
+
+    f.get_title = lambda : "fuck"
+    f.get_content = lambda :'you'
+
+    txNlpTextJudge(f)
