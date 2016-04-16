@@ -140,4 +140,11 @@ if __name__ == "__main__":
     f.get_content = lambda: 'HHHHH'
     f.get_author = lambda: 'KIDJourney'
 
+    import copy
+
+    j = copy.copy(f)
+    j.get_author = lambda : 'HEHE'
+
     print(testJudge(f))
+    print(testJudge(j))
+
