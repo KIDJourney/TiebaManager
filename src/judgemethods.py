@@ -3,8 +3,25 @@ import json
 import time
 import logging
 
+# This module should be refacted soon
+
 POST_METHOD_LIST = []
 REPLY_METHOD_LIST = []
+WHITE_METHOD_LIST = []
+
+
+def white_list_method(func):
+    WHITE_METHOD_LIST.append(func)
+    return func
+
+
+def white_list(func):
+    def white_list_wrapper(postobject):
+        for method in WHITE_METHOD_LIST:
+            if method(postobject) == False:
+                return False
+        return func(postobject)
+    return white_list_wrapper
 
 
 def reply_method(func):
@@ -52,13 +69,15 @@ def txNlpTextJudge(post):
     :return:
     """
     url = "http://nlp.qq.com/public/wenzhi/api/common_api.php"
-    body = {'url_path': 'http://10.209.0.215:55000/text/sentiment',
+    body = {'api': 6,
             'body_data': ""}
 
     content = json.dumps({'content': post.get_title() + post.get_content()})
     body['body_data'] = content
 
     response = requests.post(url, data=body).json()
+
+    print(response)
 
     time.sleep(1)
 
@@ -74,10 +93,11 @@ def patternCheck(post):
     :return boolean:
     """
     title = post.get_title()
-    start_chr = ['R', 'r', '【','[']
+    start_chr = ['R', 'r', '【', '[']
     return title[0] not in start_chr
 
 
+@white_list
 @judge_method_logger
 def testJudge(post):
     """
@@ -104,6 +124,27 @@ def replyTestJudge(reply):
 def keyWordDected(reply):
     return "套现" in reply.get_content()
 
+@white_list_method
+def checkauthor(postobject):
+    if postobject.get_author() == 'KIDJourney':
+        return False
+
 
 if __name__ == "__main__":
-    pass
+    class foo():
+        pass
+
+    f = foo()
+
+    f.get_title = lambda: "HHuck"
+    f.get_content = lambda: 'HHHHH'
+    f.get_author = lambda: 'KIDJourney'
+
+    import copy
+
+    j = copy.copy(f)
+    j.get_author = lambda : 'HEHE'
+
+    print(testJudge(f))
+    print(testJudge(j))
+
