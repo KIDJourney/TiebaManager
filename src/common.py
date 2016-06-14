@@ -35,9 +35,13 @@ def get_post_id(url):
     :param url:
     :return string:
     """
-    url = parse.urlparse(url)
-    query = url.query
-    post_id = parse.parse_qs(query)['kz']
+    try:
+        url = parse.urlparse(url)
+        query = url.query
+        post_id = parse.parse_qs(query)['kz']
+    except KeyError:
+        post_id = ["HomePage"]
+
     return post_id[0]
 
 
