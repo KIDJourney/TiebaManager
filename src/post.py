@@ -25,6 +25,9 @@ class PostBase:
     """
 
     def __init__(self):
+        self.MAX_TITLE_DISPLAY = 10
+        self.MAX_CONTENT_DISPLAY = 20
+
         self.title = ''
         self.content = ''
         self.author = ''
@@ -45,7 +48,7 @@ class PostBase:
             self.content, self.author, self.time, self.del_url, self.ban_url)
 
     def get_content(self):
-        return self.content
+        return self.content[:self.MAX_CONTENT_DISPLAY]
 
     def get_author(self):
         return self.author
@@ -69,6 +72,7 @@ class Post(PostBase):
     """
 
     def __init__(self, url, soup=None):
+
         if soup is None:
             raise Exception("The soup must be provided")
         PostBase.__init__(self)
@@ -83,7 +87,7 @@ class Post(PostBase):
         return self.url
 
     def get_title(self):
-        return self.title
+        return self.title[:self.MAX_TITLE_DISPLAY]
 
     def __str__(self):
         return "\tUrl: {0}\n".format(self.url) + "\tTitle: {0}".format(self.title) + PostBase.__str__(self)
