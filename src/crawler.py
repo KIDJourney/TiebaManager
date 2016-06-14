@@ -27,19 +27,19 @@ class TiebaCrawler(Requester):
         Checking cookie available , tieba existence , manage rights validity
         :return boolean:
         """
-        logging.info("Doing available_check")
+        logging.info("Cookie Available Check")
 
         response = self.get_content(self.tieba_base)
 
         if "参与本吧讨论请先" in response:
-            logging.error("Doing available_check : FAILED")
+            logging.error("Cookie Available Check : FAILED")
             raise Exception("User Cookie not available")
 
         logging.info("Checked")
 
-        logging.info("Checking tieba existence......")
+        logging.info("Checking Tieba Existence......")
         if "尚未建立" in response:
-            logging.error("Checking tieba existence : FAILED")
+            logging.error("Checking Tieba Existence : FAILED")
             raise Exception("{0} doesn't exist".format(self.tieba_name))
 
         logging.info("Checked")

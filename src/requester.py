@@ -55,12 +55,11 @@ class Requester:
         """
         try:
             response = self.session_worker.get(url, timeout=10)
-
-            logging.info('Get {0} succeed'.format(url))
+            logging.debug('Get {0} SUCCESS'.format(common.get_post_id(url)))
             return response
         except requests.Timeout as e:
-            logging.warning('Get {0} failed : {1}'.format(common.get_post_id(url), e))
+            logging.warning('Get {0} TIMEOUT'.format(common.get_post_id(url), e))
         except Exception as e:
-            logging.warning('Get {0} failed : unexpected :{1} '.format(common.get_post_id(url), e))
+            logging.warning('Get {0} FAILED :{1} '.format(common.get_post_id(url), e))
 
         return None

@@ -5,8 +5,12 @@ import sys, os
 
 if __name__ == "__main__":
     cookie, tiebaName = config_reader()
-    logging.basicConfig(filename='log.txt', level=logging.DEBUG, format='%(asctime)s %(message)s')
+
+    logging.basicConfig(filename='log.txt', level=logging.INFO, format='%(asctime)s %(message)s')
+    logging.getLogger('requests').setLevel(logging.WARNING)
+
     eventLoop = EventLoop(tiebaName, cookie)
+
     while True:
         try:
             eventLoop.loop()
