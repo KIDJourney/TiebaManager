@@ -7,21 +7,6 @@ import logging
 
 POST_METHOD_LIST = []
 REPLY_METHOD_LIST = []
-WHITE_METHOD_LIST = []
-
-
-def white_list_method(func):
-    WHITE_METHOD_LIST.append(func)
-    return func
-
-
-def white_list(func):
-    def white_list_wrapper(postobject):
-        for method in WHITE_METHOD_LIST:
-            if method(postobject) == False:
-                return False
-        return func(postobject)
-    return white_list_wrapper
 
 
 def reply_method(func):
@@ -39,16 +24,15 @@ def judge_method_logger(func):
         judge_result = func(postobject)
 
         logging.info(
-            "Judging {0} {1} with {2}: {3}".format(postobject.get_title(), postobject.get_content(), func.__name__,
-                                                   str(judge_result)))
+            "JUDGE {0} {1} WITH {2}: {3}".format(postobject.get_title(), postobject.get_content(), func.__name__,
+                                                 str(judge_result)))
 
         return judge_result
 
     return judege_logger
 
 
-@judge_method_logger
-def wordBags(post):
+def word_bags(post):
     with open('wordsbag.txt') as f:
         wordbag = f.read().split()
 
@@ -60,79 +44,46 @@ def wordBags(post):
     return False
 
 
-@judge_method_logger
 def txNlpTextJudge(post):
     """
-    Text emotion analyze provided by Tencent
-    Page:http://nlp.qq.com/semantic.cgi#page4
-    :param post:
-    :return:
-    """
+        Text emotion analyze provided by Tencent
+        Page:http://nlp.qq.com/semantic.cgi#page4
+        :param post:
+        :return:
+        """
     url = "http://nlp.qq.com/public/wenzhi/api/common_api.php"
     body = {'api': 6,
             'body_data': ""}
-
     content = json.dumps({'content': post.get_title() + post.get_content()})
     body['body_data'] = content
-
     response = requests.post(url, data=body).json()
-
-    print(response)
-
     time.sleep(1)
-
     return response['negative'] > 0.75
 
 
-@post_method
-@judge_method_logger
-def patternCheck(post):
+def pattern_check(post):
     """
-    Check if title start with ['R', 'r', '【']
-    :param post:
-    :return boolean:
-    """
+        Check if title start with ['R', 'r', '【']
+        :param post:
+        :return boolean:
+        """
     title = post.get_title()
     start_chr = ['R', 'r', '【', '[']
     return title[0] not in start_chr
 
 
-@white_list
-@judge_method_logger
-def testJudge(post):
-    """
-    Judge method for debugging
-    :param post:
-    :return:
-    """
-    post_title = post.get_title()
-    return post_title[0] == 'H'
+@post_method
+def test_judge(post):
+    return '傻逼' in post.get_title()
 
 
-@judge_method_logger
-def replyTestJudge(reply):
-    """
-    Judge Method form Debugging
-    :param reply:
-    :return:
-    """
-    reply_content = reply.get_content()
-    return reply_content[0] == 'H'
-
-
-@judge_method_logger
-def keyWordDected(reply):
-    return "套现" in reply.get_content()
-
-@white_list_method
-def checkauthor(postobject):
-    if postobject.get_author() == 'KIDJourney':
-        return False
-
+POST_METHOD_LIST = [judge_method_logger(i) for i in POST_METHOD_LIST]
+REPLY_METHOD_LIST = [judge_method_logger(i) for i in REPLY_METHOD_LIST]
 
 if __name__ == "__main__":
     class foo():
         pass
+
 
     f = foo()
 
@@ -143,8 +94,4 @@ if __name__ == "__main__":
     import copy
 
     j = copy.copy(f)
-    j.get_author = lambda : 'HEHE'
-
-    print(testJudge(f))
-    print(testJudge(j))
-
+    j.get_author = lambda: 'HEHE'
