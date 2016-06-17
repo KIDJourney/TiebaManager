@@ -23,9 +23,9 @@ def judge_method_logger(func):
     def judege_logger(postobject):
         judge_result = func(postobject)
 
-        logging.info(
-            "JUDGE {0} {1} WITH {2}: {3}".format(postobject.get_title(), postobject.get_content(), func.__name__,
-                                                 str(judge_result)))
+        if judge_result:
+            logging.info(
+                "JUDGE {0} {1} WITH {2}".format(postobject.get_title(), postobject.get_content(), func.__name__, ))
 
         return judge_result
 
