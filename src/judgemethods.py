@@ -24,8 +24,10 @@ def judge_method_logger(func):
         judge_result = func(postobject)
 
         if judge_result:
+            desc = getattr(func, 'desc', '无说明')
+
             logging.info(
-                "JUDGE {0} {1} WITH {2}".format(postobject.get_title(), postobject.get_content(), func.__name__, ))
+                "JUDGE {0} {1} : {2}".format(postobject.get_title(), postobject.get_content(), desc, ))
 
         return judge_result
 
@@ -33,6 +35,8 @@ def judge_method_logger(func):
 
 
 def word_bags(post):
+    word_bags.desc = "词袋"
+
     with open('wordsbag.txt') as f:
         wordbag = f.read().split()
 
@@ -51,6 +55,8 @@ def txNlpTextJudge(post):
         :param post:
         :return:
         """
+    txNlpTextJudge.desc = "腾讯情感分析"
+
     url = "http://nlp.qq.com/public/wenzhi/api/common_api.php"
     body = {'api': 6,
             'body_data': ""}
@@ -66,7 +72,9 @@ def pattern_check(post):
         Check if title start with ['R', 'r', '【']
         :param post:
         :return boolean:
-        """
+    """
+    pattern_check.desc = "标题格式"
+
     title = post.get_title()
     start_chr = ['R', 'r', '【', '[']
     return title[0] not in start_chr
@@ -74,6 +82,8 @@ def pattern_check(post):
 
 @post_method
 def test_judge(post):
+    test_judge.desc = "测试函数"
+
     return '傻逼' in post.get_title()
 
 
