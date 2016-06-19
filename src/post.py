@@ -87,7 +87,7 @@ class Post(PostBase):
         return self.url
 
     def get_title(self):
-        return " POST " + self.title[:self.MAX_TITLE_DISPLAY]
+        return self.title[:self.MAX_TITLE_DISPLAY]
 
     def __str__(self):
         return "\tUrl: {0}\n".format(self.url) + "\tTitle: {0}".format(self.title) + PostBase.__str__(self)
