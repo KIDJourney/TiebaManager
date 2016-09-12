@@ -24,7 +24,7 @@ class ConfigLoader:
     def __getattr__(self, item):
         if self.auto_reload:
             self._set_config()
-        
+
         return self.config.get(item)
 
     def update_config(self, **kwargs):
@@ -35,3 +35,5 @@ class ConfigLoader:
 
     def __repr__(self):
         return '<ConfigLoader: {}>'.format(self.config_file)
+
+config = ConfigLoader()
